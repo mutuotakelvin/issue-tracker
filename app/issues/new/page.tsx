@@ -28,6 +28,16 @@ const NewIssuePage = () => {
   })
   const [error, setError] = useState('')
   const [isSubmitting, setIsSubmiting] = useState(false)
+  const onSubmit = handleSubmit(async(data) => {
+    try {
+      setIsSubmiting(true)
+      await axios.post('/api/issues',data)
+      router.push('/issues')
+    } catch (error) {
+      setIsSubmiting(false)
+      setError('Unexpetected error occured')
+    }
+  })
 
   return (
     <div className=''>
@@ -38,16 +48,7 @@ const NewIssuePage = () => {
         </Callout.Root>
       }
       <form className='space-y-3'
-          onSubmit={handleSubmit(async(data) => {
-            try {
-              setIsSubmiting(true)
-              await axios.post('/api/issues',data)
-              router.push('/issues')
-            } catch (error) {
-              setIsSubmiting(false)
-              setError('Unexpetected error occured')
-            }
-          })}>
+          onSubmit={onSubmit}>
           <TextField.Root >
               <TextFieldInput placeholder='Title' {...register('title')}/>
           </TextField.Root>
